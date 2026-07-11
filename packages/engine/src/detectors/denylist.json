@@ -1,0 +1,29 @@
+{
+  "note": "Static seed denylist of scam/drainer-associated addresses. Illustrative for demo + a fast local first pass; production plugs a live feed (ScamSniffer / GoPlus / Chainalysis / Blockaid) via the denylistProvider hook. Addresses are stored lowercased.",
+  "entries": [
+    {
+      "address": "0x0000d38a234679f88dd6343d34e26dcb50c30000",
+      "category": "drainer",
+      "label": "Inferno-style wallet drainer sweeper (seed)",
+      "source": "frisk-seed"
+    },
+    {
+      "address": "0x00009a642e0b3b2d0f9b1e2f9d7a9d0000000000",
+      "category": "drainer",
+      "label": "Angel Drainer router (seed)",
+      "source": "frisk-seed"
+    },
+    {
+      "address": "0x000000f0d3c0d3c0d3c0d3c0d3c0d3c0d3c00000",
+      "category": "phishing",
+      "label": "Fake token approval collector (seed)",
+      "source": "frisk-seed"
+    },
+    {
+      "address": "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0666",
+      "category": "malware",
+      "label": "Known malware payout address (seed)",
+      "source": "frisk-seed"
+    }
+  ]
+}
