@@ -1,0 +1,27 @@
+{
+  "name": "frisk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Frisk — pre-payment safety layer for the agent economy. Frisk it before you trust it.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "build": "pnpm -r --filter=./packages/* build",
+    "test": "pnpm -r --filter=./packages/* test",
+    "typecheck": "pnpm -r --filter=./packages/* typecheck",
+    "dev:asp": "pnpm --filter @frisk/asp dev",
+    "contracts:test": "forge test --root contracts",
+    "contracts:build": "forge build --root contracts"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "^5.1.0",
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

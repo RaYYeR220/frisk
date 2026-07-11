@@ -1,0 +1,48 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# builds
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+contracts/foundry.lock
+
+# env & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+deployer.json
+keystore/
+
+# logs & os
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/
+.idea/
+
+# test/coverage
+coverage/
+.nyc_output/
+
+# UI prototypes / design refs — never ship
+ui-prototypes/
+mockups/
+design-ref/
+variants/
+
+# app framework caches
+app/.next/
+app/dist/
