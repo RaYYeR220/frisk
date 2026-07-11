@@ -283,14 +283,19 @@ The real `.env` is gitignored; only `.env.example` is committed.
 ## Proof
 
 - **Demo video** (90 seconds): <https://youtu.be/vDVfHTqwCSg>
-- **Live ASP** (public HTTPS, speaks x402):
+- **Live ASP** (public HTTPS, speaks x402, running on X Layer **mainnet**):
   <https://frisk-930639894082.europe-west1.run.app>
-- **`FriskRegistry`** on X Layer testnet (chain `1952`): `0xB3E1F28dB5d7eCEE109B0757805791413247a1C9`
-  → [view on OKLink](https://www.oklink.com/xlayer-test/address/0xB3E1F28dB5d7eCEE109B0757805791413247a1C9)
-- **On-chain attestation anchored** (`recordAttestation` tx):
-  [`0x2409a75a…afd4d6b5`](https://www.oklink.com/xlayer-test/tx/0x2409a75a91eb4701a9161f7d2cc9bdd88d0ac76922ca6d794de71362afd4d6b5)
-- **Full buyer→ASP x402 paid call** with real settlement (tx):
-  [`0xc62afd6e…81f286dc`](https://www.oklink.com/xlayer-test/tx/0xc62afd6eb777e50a8443841d7666820cecdb7ea00109fc9c137e825781f286dc)
+- **`FriskRegistry` on X Layer mainnet** (chain `196`): `0xe3Daa911CdB3d6d08c39309B95f0E02B7BEE89c7`
+  → [OKLink](https://www.oklink.com/xlayer/address/0xe3Daa911CdB3d6d08c39309B95f0E02B7BEE89c7) ·
+  source-verified (Sourcify, exact match) · USDT0-denominated validator bond staked.
+- **On-chain attestation anchored on mainnet** (`recordAttestation`; `isValid` returns `true`):
+  [`0x367d67c1…b1b43697`](https://www.oklink.com/xlayer/tx/0x367d67c13c21ee9b6913f56709ef573c425ec1c83a85830a50b5a875b1b43697)
+- **Full buyer→ASP x402 paid call on mainnet** — real `0.05` USDT0 settled to `payTo`:
+  [`0x40a09720…d98203a5a`](https://www.oklink.com/xlayer/tx/0x40a097202d7e8dc19b3071383a7d34e8056891805a11d02acec6964d98203a5a)
+- Also proven end-to-end on X Layer testnet (chain `1952`): registry
+  [`0xB3E1F28d…47a1C9`](https://www.oklink.com/xlayer-test/address/0xB3E1F28dB5d7eCEE109B0757805791413247a1C9),
+  [anchor tx](https://www.oklink.com/xlayer-test/tx/0x2409a75a91eb4701a9161f7d2cc9bdd88d0ac76922ca6d794de71362afd4d6b5),
+  [paid call](https://www.oklink.com/xlayer-test/tx/0xc62afd6eb777e50a8443841d7666820cecdb7ea00109fc9c137e825781f286dc).
 - **Tests: 116 passing** — engine `82`, contracts `26`, ASP `4`, guard `4` — including adversarial
   payment-integrity vectors (payTo-rewrite, amount-inflate, asset-swap, unoffered-requirement,
   decoupled-auth), a prompt-injection corpus, and dispute/slash/bond-accounting invariants. A parity
@@ -310,8 +315,10 @@ forge test --root contracts  # FriskRegistry
 
 Frisk is early and deliberately honest about its edges:
 
-- **Testnet-first.** The registry and proof transactions live on X Layer testnet. Mainnet promotion
-  is a config flip (`FRISK_NETWORK=mainnet`), pending a mainnet bond deposit.
+- **Live on mainnet, single validator.** The registry, a staked USDT0 validator bond, an anchored
+  attestation and a real x402 paid call are all live on X Layer mainnet (the same flow also runs on
+  testnet). Frisk currently runs as one validator with a nominal bond; a production deployment raises
+  the bond and adds independent validators.
 - **Arbiter-based disputes.** Slashing is resolved by a single trusted arbiter today. A full
   evaluator-network dispute resolution (multiple independent evaluators, staked, adjudicating
   disputes) is roadmap; the contract interface is kept clean for that upgrade.
