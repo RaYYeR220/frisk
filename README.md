@@ -7,6 +7,8 @@
 ![Network](https://img.shields.io/badge/network-X%20Layer-black)
 ![Tests](https://img.shields.io/badge/tests-116%20passing-success)
 
+**▶ [Watch the 90-second demo](https://youtu.be/vDVfHTqwCSg)**
+
 Autonomous agents are starting to spend real money — paying per API call, signing
 [x402](https://github.com/coinbase/x402) payments, and accepting tasks from other agents on open
 marketplaces. The moment an agent can move funds on its own, it becomes a target: a rewritten
@@ -280,6 +282,7 @@ The real `.env` is gitignored; only `.env.example` is committed.
 
 ## Proof
 
+- **Demo video** (90 seconds): <https://youtu.be/vDVfHTqwCSg>
 - **Live ASP** (public HTTPS, speaks x402):
   <https://frisk-930639894082.europe-west1.run.app>
 - **`FriskRegistry`** on X Layer testnet (chain `1952`): `0xB3E1F28dB5d7eCEE109B0757805791413247a1C9`
