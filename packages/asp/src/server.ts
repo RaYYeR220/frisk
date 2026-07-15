@@ -60,18 +60,22 @@ export function createServer(cfg: FriskConfig = loadConfig(), deps: PreflightDep
     const resourceServer = new x402ResourceServer(
       new OKXFacilitatorClient({ ...cfg.okx, syncSettle: true }),
     ).register(cfg.caip2, new ExactEvmScheme());
+    const paid = {
+      accepts: {
+        scheme: "exact",
+        price: cfg.price,
+        network: cfg.caip2,
+        payTo: cfg.payTo ?? deps.signer?.address ?? "0x0000000000000000000000000000000000000000",
+      },
+      description: "Frisk pre-payment safety check — 4-detector verdict + signed attestation.",
+    };
     app.use(
       paymentMiddleware(
         {
-          "POST /v1/preflight": {
-            accepts: {
-              scheme: "exact",
-              price: cfg.price,
-              network: cfg.caip2,
-              payTo: cfg.payTo ?? deps.signer?.address ?? "0x0000000000000000000000000000000000000000",
-            },
-            description: "Frisk pre-payment safety check — 4-detector verdict + signed attestation.",
-          },
+          // The x402 challenge is served on BOTH verbs: GET is the discovery/health probe
+          // (returns the 402 + accepts array without a body), POST carries the FriskRequest.
+          "GET /v1/preflight": paid,
+          "POST /v1/preflight": paid,
         },
         resourceServer,
         undefined,
@@ -79,6 +83,16 @@ export function createServer(cfg: FriskConfig = loadConfig(), deps: PreflightDep
         true, // sync supported kinds from the facilitator on start so 402 challenges build
       ),
     );
+    // A paid GET (rare — the probe never pays) just describes how to call the service.
+    app.get("/v1/preflight", (_req: Request, res: Response): void => {
+      res.json({
+        service: "Frisk pre-payment safety check",
+        method: "POST",
+        body: "FriskRequest",
+        price: cfg.price,
+        network: cfg.caip2,
+      });
+    });
     app.post("/v1/preflight", preflightHandler);
   }
 
