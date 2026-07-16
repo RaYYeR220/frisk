@@ -9,6 +9,7 @@ import { verifyAttestation, type Attestation, type FriskRequest } from "@frisk/s
 import { loadConfig, type FriskConfig } from "./config.js";
 import { runPreflight, type PreflightDeps } from "./preflight.js";
 import { publicClient, readOnChainValid } from "./registry.js";
+import { openapiSpec, mcpCard, rootIndex } from "./descriptors.js";
 
 /** JSON.stringify that survives bigint fields (the attestation carries uint64 as bigint). */
 const jsonStringify = (v: unknown): string =>
@@ -140,6 +141,16 @@ export function createServer(cfg: FriskConfig = loadConfig(), deps: PreflightDep
   app.get("/health", (_req: Request, res: Response): void => {
     res.json({ ok: true, name: AGENT_NAME, network: cfg.network, devBypass: cfg.devBypass });
   });
+
+  // --- service discovery (free) — so agent-callers can learn how to invoke Frisk ------ //
+  const openapi = (_req: Request, res: Response): void => void res.json(openapiSpec(cfg));
+  app.get("/openapi.json", openapi);
+  app.get("/m2m-openapi.json", openapi);
+  app.get("/.well-known/openapi.json", openapi);
+  const mcp = (_req: Request, res: Response): void => void res.json(mcpCard(cfg));
+  app.get("/.well-known/mcp.json", mcp);
+  app.get("/.well-known/mcp/server-card.json", mcp);
+  app.get("/", (_req: Request, res: Response): void => void res.json(rootIndex(cfg)));
 
   return app;
 }

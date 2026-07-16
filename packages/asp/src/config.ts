@@ -11,6 +11,7 @@ const Env = z.object({
     .regex(/^0x[0-9a-fA-F]{64}$/, "FRISK_SIGNER_PK must be a 32-byte hex key")
     .optional(),
   FRISK_PAYTO: z.string().regex(/^0x[0-9a-fA-F]{40}$/).optional(),
+  FRISK_PUBLIC_URL: z.string().url().optional(),
   XLAYER_RPC: z.string().url().optional(),
   FRISK_REGISTRY_ADDR: z.string().regex(/^0x[0-9a-fA-F]{40}$/).optional(),
   ANTHROPIC_API_KEY: z.string().optional(),
@@ -33,6 +34,7 @@ export interface FriskConfig {
   explorer: string;
   signerPk?: `0x${string}`;
   payTo?: `0x${string}`;
+  publicUrl?: string;
   registryAddr?: `0x${string}`;
   anthropicKey?: string;
   okx?: { apiKey: string; secretKey: string; passphrase: string };
@@ -56,6 +58,7 @@ export function loadConfig(overrides: Partial<FriskConfig> = {}): FriskConfig {
     explorer: chain.explorer,
     signerPk: env.FRISK_SIGNER_PK as `0x${string}` | undefined,
     payTo: (env.FRISK_PAYTO as `0x${string}` | undefined),
+    publicUrl: env.FRISK_PUBLIC_URL,
     registryAddr: env.FRISK_REGISTRY_ADDR as `0x${string}` | undefined,
     anthropicKey: env.ANTHROPIC_API_KEY,
     okx,
