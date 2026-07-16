@@ -36,6 +36,9 @@ export function buildDeps(cfg: FriskConfig): PreflightDeps {
 
 export function createServer(cfg: FriskConfig = loadConfig(), deps: PreflightDeps = buildDeps(cfg)): Express {
   const app = express();
+  // Behind Cloud Run's TLS-terminating proxy: honour X-Forwarded-Proto so the x402 challenge's
+  // `resource.url` is built as https:// (matching the registered endpoint), not http://.
+  app.set("trust proxy", true);
   app.use(express.json({ limit: "1mb" }));
 
   const preflightHandler = async (req: Request, res: Response): Promise<void> => {
