@@ -43,7 +43,8 @@ export function createServer(cfg: FriskConfig = loadConfig(), deps: PreflightDep
 
   const preflightHandler = async (req: Request, res: Response): Promise<void> => {
     try {
-      const verdict = await runPreflight(req.body as FriskRequest, deps);
+      const body = (req.body ?? {}) as FriskRequest;
+      const verdict = await runPreflight(body, deps);
       res.type("application/json").send(jsonStringify(verdict));
     } catch (err) {
       res.status(400).json({ error: (err as Error).message });

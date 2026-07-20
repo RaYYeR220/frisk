@@ -42,6 +42,9 @@ function randomNonce(): Hex {
  * route, the MCP tool and the demo identically.
  */
 export async function runPreflight(req: FriskRequest, deps: PreflightDeps): Promise<FriskVerdict> {
+  // Defensive: an agent-caller may POST a partial/empty body. Normalise once here so both the
+  // engine and the attestation path (subjectBytes32 reads req.intent.expectedPayTo) are safe.
+  req = { ...(req ?? {}), intent: (req?.intent ?? {}) } as FriskRequest;
   const verdict = await deps.engine.assess(req);
   if (!deps.signer) return verdict;
 

@@ -112,6 +112,10 @@ export function createEngine(options: CreateEngineOptions = {}): FriskEngine {
 
   return {
     async assess(req: FriskRequest, ctxOverride?: Partial<DetectorContext>): Promise<FriskVerdict> {
+      // Defensive: an agent-caller may POST a partial or empty body. Never throw — normalise so
+      // every `req.intent.*` read below (and in intentHash) is safe. Missing signals simply make
+      // a detector report ran:false; a valid verdict is still produced (ALLOW when nothing flags).
+      req = { ...(req ?? {}), intent: (req?.intent ?? {}) } as FriskRequest;
       const now = ctxOverride?.now ?? baseDefaults.now ?? nowSeconds();
       const ctx: DetectorContext = {
         rpcUrl: baseDefaults.rpcUrl!,

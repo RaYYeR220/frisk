@@ -50,6 +50,17 @@ describe("composite engine", () => {
     for (const d of v.detectors) expect(typeof d.latencyMs).toBe("number");
   });
 
+  it("never throws on a partial/empty body (agent-caller robustness)", async () => {
+    // An agent-caller may POST an empty or intent-less body (after paying) — must not 500.
+    const bodies = [{}, { task: { text: "hi" } }, { intent: undefined }] as unknown as FriskRequest[];
+    for (const body of bodies) {
+      const v = await assess(body);
+      expect(v.decision).toBe("ALLOW");
+      expect(v.subject.intentHash.startsWith("0x")).toBe(true);
+      expect(v.detectors).toHaveLength(4);
+    }
+  });
+
   it("WARN: new-identity counterparty", async () => {
     const v = await assess({
       intent: { action: "pay", counterpartyAgentId: "okx:agent:new-seller" },
